@@ -78,8 +78,8 @@ public class UserServiceImpl implements IUserService {
 	public Map<String, Object> getUserDetailsById(String id) {
 		Map<String, Object> data = new HashMap<String, Object>();
 		if (id != null && !"".equals(id)) {
-			User user = userMapper.getByPrimaryKey(id);
-			UserArchive userArchive = archiveMapper.getByPrimaryKey(id);
+			User user = userMapper.get(id);
+			UserArchive userArchive = archiveMapper.get(id);
 			if (user != null) {
 				data.put("id", user.getId());
 				data.put("userId", user.getUserId());
@@ -109,8 +109,8 @@ public class UserServiceImpl implements IUserService {
 			if (id != null && !"".equals(id)) {
 				String[] idArray = id.split(",");
 				for (int i = 0; i < idArray.length; i++) {
-					archiveMapper.deleteByPrimaryKey(idArray[i]);
-					userMapper.deleteByPrimaryKey(idArray[i]);
+					archiveMapper.delete(idArray[i]);
+					userMapper.delete(idArray[i]);
 				}
 				data.put("success", true);
 			} else {
@@ -122,21 +122,22 @@ public class UserServiceImpl implements IUserService {
 		}
 		return data;
 	}
-	
-    /**
-     * 根据ID获取用户信息
-     * 
-     * @param id [ID主键]
-     * 
-     * @return User
-     * 
-     */
-    public User findOne(String id) {
-        User user = userMapper.getByPrimaryKey(id);
-        if (user != null) {
-            user.setArchive(archiveMapper.getByPrimaryKey(id));
-        }
-        return user;
-    }
-    
+
+	/**
+	 * 根据ID获取用户信息
+	 * 
+	 * @param id
+	 *            [ID主键]
+	 * 
+	 * @return User
+	 * 
+	 */
+	public User findOne(String id) {
+		User user = userMapper.get(id);
+		if (user != null) {
+			user.setArchive(archiveMapper.get(id));
+		}
+		return user;
+	}
+
 }
