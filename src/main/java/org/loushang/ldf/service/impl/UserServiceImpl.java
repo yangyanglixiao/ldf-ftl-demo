@@ -1,9 +1,11 @@
 package org.loushang.ldf.service.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.loushang.framework.mybatis.util.PageUtil;
 import org.loushang.ldf.dao.ArchiveMapper;
 import org.loushang.ldf.dao.UserMapper;
 import org.loushang.ldf.data.User;
@@ -12,9 +14,6 @@ import org.loushang.ldf.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 
 @Service("userService")
 public class UserServiceImpl implements IUserService {
@@ -61,10 +60,10 @@ public class UserServiceImpl implements IUserService {
 	 */
 	public Map<String, Object> selectAll(Map<String, Object> parameters) {
 		Map<String, Object> data = new HashMap<String, Object>();
-		PageHelper.startPage((Integer) parameters.get("start"), (Integer) parameters.get("limit"));
-		PageInfo<User> userPage = new PageInfo<User>(userMapper.query(parameters));
-		data.put("data", userPage.getList());
-		data.put("total", userPage.getTotal());
+		List<User> list = userMapper.query(parameters);
+		int total = PageUtil.getTotalCount();
+		data.put("data", list);
+		data.put("total", total);
 
 		return data;
 	}
